@@ -36,7 +36,14 @@ the current [[https://github.com/casm-lang/casm/releases][CASM release]].
 
 ** Installation
 
-TBD
+To install the CASM docker-based package you just have to 
+install [[https://docker.com][Docker]] itself and afterwards you directly can fetch the 
+automated build container image 
+from [[https://hub.docker.com/r/casmlang/casm][DockerHub]] via the command:
+
+#+begin_src
+docker pull casmlang/casm
+#+end_src
 
 
 ** Copyright and License
