@@ -41,4 +41,4 @@ RUN wget -qO /tmp/$PACKAGE.tar.gz --no-check-certificate $URL \
 
 RUN casmi --version
 
-CMD ["/bin/bash"]
+CMD ["/bin/sh"]
