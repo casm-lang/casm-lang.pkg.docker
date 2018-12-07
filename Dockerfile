@@ -21,24 +21,53 @@
 #   along with casm-lang.pkg.docker. If not, see <http://www.gnu.org/licenses/>.
 #
 
-FROM alpine
-
+ARG RELEASE=0.2.0
 ARG PACKAGE=casm
-ARG VERSION=0.1.0
-
+ARG MONACO=casm-lang.plugin.monaco
 ARG OS=linux
 ARG ARCH=x86_64
-
 ARG ARCHIVE=tar.gz
-ENV URL=https://github.com/casm-lang/$PACKAGE/releases/download/$VERSION/$PACKAGE-$OS-$ARCH.$ARCHIVE
+ARG URL=https://github.com/casm-lang/$PACKAGE/releases/download/$RELEASE/$PACKAGE-$OS-$ARCH.$ARCHIVE
+ARG EXT=https://github.com/casm-lang/$MONACO/archive/$RELEASE.$ARCHIVE
 
-# 0.1.0 --> "sha256": "6b2dba143753ef3b1e3b42669f4e67baa10a85e95a792f90de79b3a516e552c4"
 
-RUN wget -qO /tmp/$PACKAGE.tar.gz --no-check-certificate $URL \
-&&  tar -xvf /tmp/$PACKAGE.tar.gz -C /tmp \
-&&  cp   -rf /tmp/$PACKAGE-$VERSION/* /usr/ \
-&&  rm   -rf /tmp/$PACKAGE*
+FROM alpine as source
+ARG RELEASE
+ARG PACKAGE
+ARG MONACO
+ARG OS
+ARG ARCH
+ARG ARCHIVE
+ARG URL
+ARG EXT
 
-RUN casmi --version
+RUN wget -qO  /tmp/archive.tar.gz --no-check-certificate $URL \
+&&  tar  -xvf /tmp/archive.tar.gz -C /tmp \
+&&  rm   -f   /tmp/archive.tar.gz \
+&&  ls   -al  /tmp \
+&&  wget -qO  /tmp/archive.tar.gz --no-check-certificate $EXT \
+&&  tar  -xvf /tmp/archive.tar.gz -C /tmp \
+&&  rm   -f   /tmp/archive.tar.gz \
+&&  ls   -al  /tmp
+
+
+FROM mhart/alpine-node:8.14.0
+ARG RELEASE
+ARG PACKAGE
+ARG MONACO
+ARG OS
+ARG ARCH
+ARG ARCHIVE
+ARG URL
+ARG EXT
+
+RUN mkdir /opt
+WORKDIR /opt
+COPY --from=source /tmp/$PACKAGE-$RELEASE /usr
+COPY --from=source /tmp/$MONACO-$RELEASE .
+RUN casmi --version \
+&&  casmd --version \
+&&  npm install \
+&&  npm run build
 
 CMD ["/bin/sh"]
