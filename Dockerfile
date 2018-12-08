@@ -42,13 +42,11 @@ ARG URL
 ARG EXT
 
 RUN wget -qO  /tmp/archive.tar.gz --no-check-certificate $URL \
-&&  tar  -xvf /tmp/archive.tar.gz -C /tmp \
+&&  tar  -xf  /tmp/archive.tar.gz -C /tmp \
 &&  rm   -f   /tmp/archive.tar.gz \
-&&  ls   -al  /tmp \
 &&  wget -qO  /tmp/archive.tar.gz --no-check-certificate $EXT \
-&&  tar  -xvf /tmp/archive.tar.gz -C /tmp \
-&&  rm   -f   /tmp/archive.tar.gz \
-&&  ls   -al  /tmp
+&&  tar  -xf  /tmp/archive.tar.gz -C /tmp \
+&&  rm   -f   /tmp/archive.tar.gz
 
 
 FROM mhart/alpine-node:8.14.0
@@ -65,9 +63,9 @@ RUN mkdir /opt
 WORKDIR /opt
 COPY --from=source /tmp/$PACKAGE-$RELEASE /usr
 COPY --from=source /tmp/$MONACO-$RELEASE .
-RUN casmi --version \
-&&  casmd --version \
-&&  npm install \
+RUN casmi --version
+RUN casmd --version
+RUN npm install \
 &&  npm run build
 
 CMD ["/bin/sh"]
