@@ -30,7 +30,6 @@ ARG ARCHIVE=tar.gz
 ARG URL=https://github.com/casm-lang/$PACKAGE/releases/download/$RELEASE/$PACKAGE-$OS-$ARCH.$ARCHIVE
 ARG EXT=https://github.com/casm-lang/$MONACO/archive/$RELEASE.$ARCHIVE
 
-
 FROM alpine as source
 ARG RELEASE
 ARG PACKAGE
@@ -47,7 +46,6 @@ RUN wget -qO  /tmp/archive.tar.gz --no-check-certificate $URL \
 &&  wget -qO  /tmp/archive.tar.gz --no-check-certificate $EXT \
 &&  tar  -xf  /tmp/archive.tar.gz -C /tmp \
 &&  rm   -f   /tmp/archive.tar.gz
-
 
 FROM mhart/alpine-node:8.14.0
 ARG RELEASE
@@ -69,3 +67,5 @@ RUN npm install \
 &&  npm run build
 
 CMD ["/bin/sh"]
+
+LABEL maintainer ppaulweber
