@@ -66,8 +66,8 @@ RUN casmd --version
 RUN npm install \
 &&  npm run build
 
-RUN echo "#!/bin/sh"                       > /usr/local/bin/editor \
-&&  echo "(cd opt; npm run standalone &)" >> /usr/local/bin/editor \
+RUN echo "#!/bin/sh"                      > /usr/local/bin/editor \
+&&  echo "(cd /opt; npm run standalone)" >> /usr/local/bin/editor \
 &&  chmod +x /usr/local/bin/editor
 
 EXPOSE 8080 8010
