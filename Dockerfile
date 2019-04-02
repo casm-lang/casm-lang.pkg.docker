@@ -21,7 +21,7 @@
 #   along with casm-lang.pkg.docker. If not, see <http://www.gnu.org/licenses/>.
 #
 
-ARG RELEASE=0.2.0
+ARG RELEASE=0.3.0
 ARG PACKAGE=casm
 ARG MONACO=casm-lang.plugin.monaco
 ARG OS=linux
@@ -61,8 +61,12 @@ RUN mkdir /opt
 WORKDIR /opt
 COPY --from=source /tmp/$PACKAGE-$RELEASE /usr
 COPY --from=source /tmp/$MONACO-$RELEASE .
+RUN chmod +x /usr/bin/casmi
 RUN casmi --version
+RUN chmod +x /usr/bin/casmd
 RUN casmd --version
+RUN chmod +x /usr/bin/casmf
+RUN casmf --version
 RUN npm install \
 &&  npm run build
 
