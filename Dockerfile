@@ -47,7 +47,7 @@ RUN wget -qO  /tmp/archive.tar.gz --no-check-certificate $URL \
 &&  tar  -xf  /tmp/archive.tar.gz -C /tmp \
 &&  rm   -f   /tmp/archive.tar.gz
 
-FROM mhart/alpine-node:8.14.0
+FROM node:stretch-slim
 ARG RELEASE
 ARG PACKAGE
 ARG MONACO
@@ -57,15 +57,14 @@ ARG ARCHIVE
 ARG URL
 ARG EXT
 
-RUN mkdir /opt
+RUN mkdir -p /opt
 WORKDIR /opt
 COPY --from=source /tmp/$PACKAGE-$RELEASE /usr
 COPY --from=source /tmp/$MONACO-$RELEASE .
-RUN chmod +x /usr/bin/casmi
+RUN chown root.root /usr/bin/casmi /usr/bin/casmd /usr/bin/casmf 
+RUN chmod +x        /usr/bin/casmi /usr/bin/casmd /usr/bin/casmf
 RUN casmi --version
-RUN chmod +x /usr/bin/casmd
 RUN casmd --version
-RUN chmod +x /usr/bin/casmf
 RUN casmf --version
 RUN npm install \
 &&  npm run build
@@ -76,6 +75,6 @@ RUN echo "#!/bin/sh"                      > /usr/local/bin/editor \
 
 EXPOSE 8080 8010
 
-CMD ["/bin/sh"]
+CMD ["/bin/bash"]
 
 LABEL maintainer ppaulweber
