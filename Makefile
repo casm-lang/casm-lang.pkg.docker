@@ -22,7 +22,7 @@
 #
 
 default:
-	docker build -t casmlang/casm .
+	docker build --no-cache -t casmlang/casm .
 
 editor:
 	docker run -itd -p8080:8080 -p8010:8010 casmlang/casm editor
