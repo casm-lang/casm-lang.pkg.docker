@@ -21,7 +21,7 @@
 #   along with casm-lang.pkg.docker. If not, see <http://www.gnu.org/licenses/>.
 #
 
-ARG RELEASE=0.5.0
+ARG RELEASE=0.6.0
 ARG PACKAGE=casm
 ARG MONACO=casm-lang.plugin.monaco
 ARG OS=linux
