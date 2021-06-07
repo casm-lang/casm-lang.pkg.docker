@@ -47,7 +47,7 @@ RUN wget -qO  /tmp/archive.tar.gz --no-check-certificate $URL \
 &&  tar  -xf  /tmp/archive.tar.gz -C /tmp \
 &&  rm   -f   /tmp/archive.tar.gz
 
-FROM node:stretch-slim
+FROM node:buster-slim
 ARG RELEASE
 ARG PACKAGE
 ARG MONACO
@@ -57,6 +57,9 @@ ARG ARCHIVE
 ARG URL
 ARG EXT
 
+RUN echo "deb http://ftp.us.debian.org/debian testing main contrib non-free" >> /etc/apt/sources.list \
+ && apt -y update \
+ && apt -y install build-essential
 RUN mkdir -p /opt
 WORKDIR /opt
 COPY --from=source /tmp/$PACKAGE-$RELEASE /usr
